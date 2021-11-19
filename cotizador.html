@@ -1,0 +1,398 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>HOME | ARLOEYX - Remises - Combis - Combis - Traslados</title>
+    <meta content="ARLOEYX servicios de transporte y logística, remises, grupales, fletes. Puntualidad, eficiencia, calidad y placer son premisas para nuestro servicio de Remises. ARLOEYX - Llevamos tu estilo." name="description">
+    <meta content="remises, remis, remises vip, remises en capital federal, remis ejecutivo, combis traslados, traslado a ezeiza, traslado buenos aires, transporte de personas, servicio ejecutivo, servicio de traslados, alquiler de autos, alquiler de combis, vans, bus, minibus, remiseria, agencia de remises, agencia de traslados, fletes, micros, uber, uber argentina" name="keywords">
+    <meta content="index, follow" name="robots">
+    <link href="css/reset.css" rel="stylesheet">
+    <link href="css/css.css" rel="stylesheet">
+    <link href="fonts/fonts.css" rel="stylesheet">
+<link rel="icon" href="favicon.png" type="image/png" />
+    <title>Cotizador Online Arloeyx</title>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCycUcvtx4s0vJlzdCYrgKu7MBALbW8lhw&signed_in=true&callback=initMap&libraries=places" async defer></script>
+	<style>
+		#map_canvas{width:100%;height:100%;}
+		.routes{position:absolute;top:50%;left:5%;z-index:3;background:rgba(255,255,255,0.8);padding:20px;}
+		.routes input,
+		.routes select{display:block;width:280px;height:40px;border:1px solid #c7372d;padding:0 10px;-webkit-appearance:none;outline:none;font-family: 'brandon_l';font-size:1.2em;text-transform:uppercase;background:none}
+		.routes select{border-radius:5px 5px 0 0;border-bottom:none;background:url(img/arrow.jpg) no-repeat 95% center}
+		.routes #end{border-radius:0 0 5px 5px;border-top:none;}
+		.routes h3{font-size:2em;color:#c7372d;font-family:'brandon_b', sans-serif;text-transform:uppercase;margin-bottom:20px}
+		.routes button{display:block;-webkit-appearance:none;outline:none;width:100%;height:40px;background:#c7372d;border-radius:5px;line-height:40px;text-align:center;text-transform:uppercase;color:#FFF;cursor:pointer;border:1px solid #c7372d;font-size:1.3em;letter-spacing:0.1em;transition:all ease 0.3s;-webkit-transition:all ease 0.3s;margin-top:15px;padding:0}
+		.routes .result{background:url(img/ajax-loader.gif) no-repeat center rgba(255,255,255,0.7);background-size:35px;position:absolute;width:100%;min-height:100%;z-index:99;top:0;left:0;color:#FFF;padding:20px 10px;display:none}
+		.routes .result.bgResult{background:#c7372d;}
+		.routes .result *{display:none}
+		.routes .result div{font-size:1.3em;text-transform:uppercase;font-family:'brandon_b', sans-serif;padding:0 5px;}
+		.routes .result div span{display:block;margin:5px 0;font-family:'brandon_l', sans-serif;font-size:1.1em}
+		.routes .result div.kms,
+		.routes .result div.valor{float:left;width:50%;margin:10px 0}
+		.routes .result div.kms span,
+		.routes .result div.valor span{font-size:2.5em}
+		.routes .result div.valor{text-align:right;}
+		.routes .result a{clear:both;display:block;max-width:180px;margin:10px auto;text-transform:uppercase;font-size:1.3em;text-align:center;line-height:30px;background:#FFF;color:#C7372D;box-shadow:0 0 10px rgba(0,0,0,0.5);border-radius:15px}
+		.routes .result a:hover{background:#C7372D;color:#FFF;}
+		#reset{display:block;cursor:pointer;text-align:center;}
+		#form_reservar{position:absolute;background:rgba(0,0,0,0.7);width:100%;height:100%;z-index:999;top:0;left:0;display:none}
+		#form_reservar form{max-width:480px;width:100%;padding:15px;border-radius:10px;border:#e3e3e3;background:#dFdFdF;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);-webkit-transform:translate(-50%,-50%);}
+		#form_reservar .input{width:calc(50% - 10px);margin:5px;float:left;height:40px;border-radius:2px;background:rgba(255,255,255,0.8);}
+		#form_reservar .input.error input,
+		#form_reservar .input.error textarea{border:1px solid #c7372d}
+		#form_reservar .input.txt{width:calc(100% - 10px);clear:both;height:100px;margin-bottom:20px}
+		#form_reservar button {
+			display: block;
+			-webkit-appearance: none;
+			outline: none;
+			width: 50%;
+			min-width:160px;	
+			height: 40px;
+			background: #c7372d;
+			border-radius: 30px;
+			line-height: 35px;
+			text-align: center;
+			text-transform: uppercase;
+			color: #FFF;
+			cursor: pointer;
+			border: 1px solid #c7372d;
+			margin: 20px auto 0;
+			font-size: 1.5em;
+			letter-spacing: 0.2em;
+			transition: all ease 0.3s;
+			-webkit-transition: all ease 0.3s;
+			clear:both;
+		}
+		#form_reservar input, #form_reservar textarea {
+			display: block;
+			width: 100%;
+			-webkit-appearance: none;
+			outline: none;
+			background: none;
+			height: 100%;
+			border: none;
+			padding: 10px;
+			font-size: 1.6em;
+			font-family: 'brandon_l';
+			resize: none;
+			color: #393535;
+		}
+		@media (max-width:760px){
+			.routes{top:0;left:0;padding:15px 20px;width:100%}
+			.routes h3{font-size:1.3em;margin-bottom:10px;text-align:center}
+			.routes input, .routes select{height:35px;width:100%}
+			.routes button{height:35px;line-height:35px;width:80%;left:10%;bottom:15px;position:fixed}
+			#arrow{width:35px;height:35px;border:1px solid #C7372D;background:rgba(0,0,0,0.6);color:#FFF;font-size:3em;position:fixed;right:5px;top:5px;border-radius:100%;z-index:99}
+			#arrow:after{content:'>';position:absolute;left:6px;top:0;transform: rotate(-90deg);-webkit-transform: rotate(-90deg);-ms-transform: rotate(-90deg);}
+			#arrow.h:after{transform:rotate(90deg);-webkit-transform:rotate(90deg);-ms-transform:rotate(90deg);left:12px;top:2px;}
+			#form_reservar{overflow:scroll}
+			#form_reservar form{transform:translate(0);-webkit-transform: translate(0);width:90%;margin:40px 5%;padding:10px;position:static}
+			#form_reservar .input{width:calc(100% - 10px);}
+		}
+	</style>
+  
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-P7WXZP3');</script>
+<!-- End Google Tag Manager -->
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '958480617949791');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=958480617949791&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code -->
+</head>
+
+  <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P7WXZP3"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+  	<div id="arrow"></div>
+    <div class="routes">
+    	<h3>¡Cotizá Ahora!</h3>
+        <!-- Select Vehículo -->
+        <select name="vehiculo" id="price">
+        	<option value="10" selected>Auto</option>
+        	<option value="20">Combis</option>
+        	<option value="30">MiniBus</option>
+        </select>
+        <!--label for="origen">Origen</label-->
+        <input type="text" name="origen" id="start" placeholder="Origen: (ej. Tucumán 1500 CABA)" value="aguirre 540 buenos aires" />
+        <input type="text" name="wpoint-1" id="wpoint-1" value="molinedo 3369">
+      
+        <!--label for="destino">Destino</label-->
+        <input type="text" name="destino" id="end" placeholder="Destino: (ej. Maipú 1900 Olivos)" value="olivos" />
+      
+        <button id="search">cotizar</button>
+        <div class="result">
+        	<div class="desde">Desde: <span></span></div>
+        	<div class="hasta">Hasta: <span></span></div>
+            <div class="kms">Total de Km:<span></span></div>
+            <div class="valor">Valor aprox:<span>$ <strong></strong></span></div>
+        	<a href="reservar.html" id="reservar"><strong>reservar</strong></a>
+            <div id="reset">volver a cotizar</div>
+        </div>
+    </div>
+    
+    <div id="map_canvas"></div>
+    <div id="form_reservar">
+    <form action="" name="form_reserva" autocomplete="off" method="post">
+    	<input type="hidden" name="Origen" value="Cotizador Online">
+        <div class="input"><input type="text" name="name" placeholder="Nombre y Apellido"></div>
+        <div class="input"><input type="text" name="lugar_origen" placeholder="Lugar de origen"></div>
+        <div class="input"><input type="text" name="lugar_destino" placeholder="Lugar de destino"></div>
+        <div class="input mid"><input type="date" name="fecha" placeholder="Fecha"></div>
+        <div class="input mid"><input type="text" name="hora" placeholder="Hora"></div>
+        <div class="input"><input type="number" name="cantidad_personas" placeholder="Cantidad de Pasajeros"></div>
+        <div class="input"><input type="number" name="telefono" placeholder="Teléfono"></div>
+        <div class="input"><input type="email" name="email" placeholder="E-mail"></div>
+        <div class="input txt"><textarea name="comentario" placeholder="Comentario"></textarea></div>
+        <button>Enviar</button>
+    </form>
+    </div>
+    
+    <script type="text/javascript">	
+	var map = null;
+	var directionsDisplay = null;
+	var directionsService = null;
+
+	function initMap() {		
+		var mapOptions = {
+			zoom: 13,
+			center: new google.maps.LatLng(-34.6204885,-58.4121957),
+			disableDefaultUI: false,
+			zoomControl: false,
+  		    mapTypeControl: false,
+		    scaleControl: false,
+		    streetViewControl: false,
+		    rotateControl: false,
+        	mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+	    map = new google.maps.Map($("#map_canvas").get(0), mapOptions);
+		directionsDisplay = new google.maps.DirectionsRenderer();
+		directionsService = new google.maps.DirectionsService();
+ 
+		var colores = [
+			{
+			  featureType: "all",
+			  elementType: "all",
+			  stylers: [
+				{ saturation: -100 }
+			  ]
+			}
+		];
+		var estilo = new google.maps.StyledMapType(colores);
+			map.mapTypes.set('mapa-bn', estilo);
+			map.setMapTypeId('mapa-bn');
+			
+		var input = document.getElementById('start');
+		var input2 = document.getElementById('end');
+		var autocomplete = new google.maps.places.Autocomplete(input);
+		var autocomplete2 = new google.maps.places.Autocomplete(input2);
+	
+	}
+
+	function getDirections(){
+		var price = $('#price').val()
+		var start = $('#start').val();
+		var end = $('#end').val();
+		var wp = $('#wpoint-1').val();
+		var waypts=[];
+		if(!start || !end){
+			alert("Se requieren dirección de origen y destino.");
+			return;
+		}
+		waypts.push({location:wp,stopover:true});
+		var request = {
+		        origin: start,
+		        destination: end,
+				waypoints: waypts,
+				travelMode: google.maps.DirectionsTravelMode.DRIVING,
+		        //travelMode: google.maps.DirectionsTravelMode[$('#travelMode').val()],
+		        //unitSystem: google.maps.DirectionsUnitSystem[$('#unitSystem').val()],
+		        provideRouteAlternatives: false,
+	    };
+		directionsService.route(request, function(response, status) {
+	        if (status == google.maps.DirectionsStatus.OK) {
+	            //directionsDisplay.setPanel($("#panel_ruta").get(0));
+				directionsDisplay.setOptions( { suppressMarkers: true } );
+				directionsDisplay.setOptions({
+				  polylineOptions: {
+					strokeColor: '#c7372d',
+					strokeOpacity: 0.6,
+        			strokeWeight: 4
+				  }
+				});
+	            directionsDisplay.setMap(map);
+	            directionsDisplay.setDirections(response);
+				
+				var myRoute = response.routes[0].legs[0];
+				
+				var marker = new google.maps.Marker({
+					position: myRoute.steps[0].start_point, 
+					map: map,
+					icon: 'img/marker.png'
+				  });
+				  console.log(myRoute.steps.length)
+				var marker = new google.maps.Marker({
+				  position: myRoute.steps[myRoute.steps.length - 1].end_point, 			
+				  map: map,				  
+				  icon: 'img/marker.png'
+				});
+
+				var km = response.routes[0].legs[0].distance.value / 1000;
+				var kmTxt = response.routes[0].legs[0].distance.text;
+				var dest = request.destination;
+				var orig = request.origin;
+				
+				console.log(dest)
+				console.log(orig)
+				console.log(km);
+				console.log(price);
+				console.log(kmTxt);
+				cotizar(dest, orig, km, price, kmTxt);
+				
+	        } else {
+	            alert("No hay direcciones disponibles entre estos dos puntos");
+	        }
+	    });
+	}
+
+	$('#search').on('click', function(){ getDirections(); });
+	$('.routeOptions').on('change', function(){ getDirections(); });
+
+	function cotizar(D, O, K, P, T){
+		$('.result').fadeIn(200);
+	var valor = Number(K) * Number(P);
+		$('.result .desde span').html(O);
+		$('.result .hasta span').html(D);
+		$('.result .kms span').html(T);
+		$('.result .valor strong').html(Math.round(valor));
+		setTimeout(function(){
+			$('.result').addClass('bgResult');	
+			$('.result *').delay(200).fadeIn(400);
+		}, 300);
+	}
+	$('.routes').on('click', '#reset', function(){
+		$('.result').fadeOut(300, function(){
+			$('.result').removeClass('bgResult');
+			$('.result *').fadeOut();	
+		})	
+	});
+	
+	$('.routes').on('click', '#reservar', function(e){
+		e.preventDefault();
+	var start = $('.result .desde span').html(),
+		end = $('.result .hasta span').html();
+		$('#form_reservar').find('input[name="lugar_origen"]').val(start);
+		$('#form_reservar').find('input[name="lugar_destino"]').val(end);
+		$('#form_reservar').fadeIn()	
+	});
+	$('#arrow').on('click', function(){
+		$('.routes').slideToggle();
+		$('#arrow').toggleClass('h');	
+	});
+	//
+	$('input:not([type="hidden"]), textarea').on('keypress', function(){
+		$(this).parent().removeClass('error');
+	});
+	$('#form_reservar form').append('<div class="msg"></div>');
+	//FORMULARIO
+	$("#form_reservar form").submit(function(e) {
+		e.preventDefault();
+	
+		var form = $(this);
+		
+		var validForm = true;
+		form.find('input:not([type="hidden"]), textarea').each(function(){
+			if( $(this).val().trim() ==''){
+				$(this).focus();
+				$(this).parent().addClass('error');
+				validForm = false;
+				return false;
+			}
+		})
+	
+	
+		if(validForm){
+	
+			var overlay = $('form .msg');
+			var action = 'service/mail.php';
+			var data = form.serializeObject();
+			console.log(action);console.log(data);
+	
+			overlay.html('Estamos enviando tu consulta...').fadeIn(300).delay(1500).fadeOut(300);
+	
+	
+				$.ajax({
+					type: 'POST',
+					url: action,
+					data: data,
+					error: function(data){
+						console.log("form:error");
+						overlay.html('Error al enviar formulario. Volvé a intentarlo más tarde.').fadeIn(300).delay(1500).fadeOut(300);
+						console.log(data);
+					},
+					success: function(data){
+						console.log("form:success");
+						overlay.html('¡Gracias! Pronto nos pondremos en contacto.').fadeIn(300).delay(1500).fadeOut(300);
+						form.find('input:not([type="hidden"]), textarea').each(function() {
+							$(this).val('');
+							$('#form_reservar').fadeOut();
+						});
+						console.log(data);
+					}
+				});
+	
+	
+		}
+		else{
+			//overlay.html('Por favor, complete todos los campos requeridos.').fadeIn(300).delay(1500).fadeOut(300);
+	
+		}
+	
+	
+	});
+	// serializes a form into an object.
+	(function($,undefined){
+	  '$:nomunge'; // Used by YUI compressor.
+	
+	  $.fn.serializeObject = function(){
+		var obj = {};
+	
+		$.each( this.serializeArray(), function(i,o){
+		  var n = o.name,
+			v = o.value;
+	
+			obj[n] = obj[n] === undefined ? v
+			  : $.isArray( obj[n] ) ? obj[n].concat( v )
+			  : [ obj[n], v ];
+		});
+	
+		return obj;
+	  };
+	
+	})(jQuery);
+	
+    </script>
+    
+  </body>
+</html>
