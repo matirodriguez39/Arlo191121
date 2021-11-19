@@ -1,7 +1,7 @@
 // JavaScript Document
 $(document).ready(function(e) {   
 	//WHATSAPP
-	$('header .wp').append('<a href="https://api.whatsapp.com/send?phone=5491131745499&text=Hola!%20ARLOEYX,%20quiero%20contactarme%20contigo!" id="whatsapp" target="_blank"><img src="img/whatsapp.png" alt="WHATSAPP"></a>');
+	$('header .wp').append('<a href="https://api.whatsapp.com/send?phone=5491131745499&text=Hola!%20ARLOEYX,%20quiero%20contactarme%20contigo!" id="whatsapp" target="_blank"><img src="/img/whatsapp.png" alt="WHATSAPP"></a>');
 	//WHATSAPP 
 	$('input[name="hora"]').mask('99:99',{placeholder:"00:00"});
 	//$('input[name="fecha"]').mask('99/99/9999',{placeholder:"00/00/0000"});
@@ -118,7 +118,7 @@ $("#footer form").submit(function(e) {
 		console.log(action);console.log(data);
 		dataLayer.push({'event': 'Form_sent'});
 		overlay.html('Estamos enviando tu consulta...').fadeIn(300);
-		form.prepend('<img src="img/loading.gif" class="loadingGif">');
+		form.prepend('<img src="/img/loading.gif" class="loadingGif">');
 
 
 			$.ajax({
@@ -136,7 +136,7 @@ $("#footer form").submit(function(e) {
 					$("#footer input, #footer textarea").val('')
 
 					overlay.html('¡Gracias! Pronto nos pondremos en contacto.');					
-					form.prepend('<img src="img/check.gif" class="loadingGif check">');
+					form.prepend('<img src="/img/check.gif" class="loadingGif check">');
 					setTimeout(function(){
 						overlay.fadeOut(300)
 						form.find('button').css('visibility', 'initial');
@@ -207,7 +207,7 @@ $("#form_contacto form").submit(function(e) {
 				success: function(data){
 					console.log("form:success");
 					$("#form_contacto input, #form_contacto textarea").val('')
-					form.prepend('<img src="img/check.gif" class="loadingGif check">');
+					form.prepend('<img src="/img/check.gif" class="loadingGif check">');
 					overlay.html('¡Gracias! Pronto nos pondremos en contacto.').fadeIn(300)
 					setTimeout(function(){
 						overlay.fadeOut(300)
