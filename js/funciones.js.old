@@ -1,4 +1,5 @@
 // JavaScript Document
+/*
 $(document).ready(function(e) {   
 	//WHATSAPP
 	$('header .wp').append('<a href="https://api.whatsapp.com/send?phone=5491131745499&text=Hola!%20ARLOEYX,%20quiero%20contactarme%20contigo!" id="whatsapp" target="_blank"><img src="/img/whatsapp.png" alt="WHATSAPP"></a>');
@@ -41,6 +42,7 @@ var st = $(window).scrollTop();
 		$('header').removeClass('fix')		
 	}
 });
+*/
 function playFlota(){	
 	var myVar2 = setInterval(cuentaAuto, 15);
 	function cuentaAuto() {
